@@ -5,7 +5,7 @@
  - SEMUA SUBSCRIBER
 */
 
-require('../config')
+require('../options/config')
 var { BufferJSON, WA_DEFAULT_EPHEMERAL, generateWAMessageFromContent, proto, generateWAMessageContent, generateWAMessage, prepareWAMessageMedia, areJidsSameUser, getContentType } = require('@adiwajshing/baileys')
 var fs = require('fs')
 var util = require('util')
@@ -19,6 +19,7 @@ var { JSDOM } = require('jsdom')
 var speed = require('performance-now')
 var { performance } = require('perf_hooks')
 var { smsg, formatp, tanggal, formatDate, getTime, isUrl, sleep, clockString, runtime, fetchJson, getBuffer, jsonformat, format, parseMention, getRandom } = require('../message/myfunc')
+var { pinterest, wallpaper, wikimedia, quotesAnime } = require('../connect/scrape/randomMn')
 var { help } = require('../connect/language/help')
 
 //━━━━━━━━━━━━━━━[ DATABASE ]━━━━━━━━━━━━━━━━━//
@@ -47,9 +48,10 @@ var command = body.replace(prefix, '').trim().split(/ +/).shift().toLowerCase()
 var args = body.trim().split(/ +/).slice(1)
 var pushname = m.pushName || "No Name"
 var botNumber = await neoxy.decodeJid(neoxy.user.id)
-var isCreator = [botNumber, ...global.owner].map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender)
+var isCreator = [botNumber, ...global.owner, ...global.cowner].map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender)
 var itsMe = m.sender == botNumber ? true : false
 var text = q = args.join(" ")
+var ini_mark = `0@s.whatsapp.net`
 var quoted = m.quoted ? m.quoted : m
 var mime = (quoted.msg || quoted).mimetype || ''
 var isMedia = /image|video|sticker|audio/.test(mime)
@@ -61,7 +63,101 @@ var groupOwner = m.isGroup ? groupMetadata.owner : ''
  var isBotAdmins = m.isGroup ? groupAdmins.includes(botNumber) : false
  var isAdmins = m.isGroup ? groupAdmins.includes(m.sender) : false
  var isPremium = isCreator || global.premium.map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender) || false
-	
+
+// Waktu
+var wib = moment.tz('Asia/Jakarta').format('HH:mm')
+var wita = moment.tz('Asia/Makassar').format('HH:mm')
+var wit = moment.tz('Asia/Jayapura').format('HH:mm')
+var jangwak = moment.tz('Asia/Jakarta').format('DD/MM/YY')
+
+var dates = moment().tz('Asia/Makassar').format("YYYY-MM-DDTHH:mm:ss");
+var datw = new Date(dates);
+var tahun = datw.getFullYear();
+var bulan = datw.getMonth();
+var taanggal = datw.getDate();
+var hari = datw.getDay();
+var jamss = datw.getHours();
+var menit = datw.getMinutes();
+var detik = datw.getSeconds();
+switch(hari) {
+case 0: hari = "Minggu"; break;
+case 1: hari = "Senin"; break;
+case 2: hari = "Selasa"; break;
+case 3: hari = "Rabu"; break;
+case 4: hari = "Kamis"; break;
+case 5: hari = "Jum'at"; break;
+case 6: hari = "Sabtu"; break;
+}
+switch(bulan) {
+case 0: bulan = "Januari"; break;
+case 1: bulan = "Februari"; break;
+case 2: bulan = "Maret"; break;
+case 3: bulan = "April"; break;
+case 4: bulan = "Mei"; break;
+case 5: bulan = "Juni"; break;
+case 6: bulan = "Juli"; break;
+case 7: bulan = "Agustus"; break;
+case 8: bulan = "September"; break;
+case 9: bulan = "Oktober"; break;
+case 10: bulan = "November"; break;
+case 11: bulan = "Desember"; break;
+}
+switch(jamss){
+case 0: jamss = 'Selamat Malam '; break;
+case 1: jamss = 'Selamat Malam '; break;
+case 2: jamss = 'Selamat Malam '; break;
+case 3: jamss = 'Selamat Pagi '; break;
+case 4: jamss = 'Selamat Pagi '; break; 
+case 5: jamss = 'Selamat Pagi '; break;
+case 6: jamss = 'Selamat Pagi '; break;
+case 7: jamss = 'Selamat Pagi '; break;
+case 8: jamss = 'Selamat Pagi '; break;
+case 9: jamss = 'Selamat Pagi '; break;
+case 10: jamss = 'Selamat Pagi '; break;
+case 11: jamss = 'Selamat Siang '; break; 
+case 12: jamss = 'Selamat Siang '; break;
+case 13: jamss = 'Selamat Siang '; break;
+case 14: jamss = 'Selamat Siang '; break;
+case 15: jamss = 'Selamat Sore '; break;
+case 16: jamss = 'Selamat Sore '; break;
+case 17: jamss = 'Selamat Sore '; break;
+case 18: jamss = 'Selamat Malam '; break; 
+case 19: jamss = 'Selamat Malam '; break;
+case 20: jamss = 'Selamat Malam '; break;
+case 21: jamss = 'Selamat Malam '; break;
+case 22: jamss = 'Selamat Malam '; break; 
+case 23: jamss = 'Selamat Malam '; break;
+}
+
+var time2 = moment().tz('Asia/Makassar').format('HH:mm:ss')
+if(time2 < "23:59:00"){
+var ucapanWaktu = 'Selamat Malam 🌌'
+}
+if(time2 < "19:00:00"){
+var ucapanWaktu = 'Selamat Petang 🌃'
+}
+if(time2 < "18:00:00"){
+var ucapanWaktu = 'Selamat Sore 🌅'
+}
+if(time2 < "15:00:00"){
+var ucapanWaktu = 'Selamat Siang 🏙'
+}
+if(time2 < "11:00:00"){
+var ucapanWaktu = 'Selamat Pagi 🌄'
+}
+if(time2 < "05:00:00"){
+var ucapanWaktu = 'Selamat Pagi 🌉'
+}
+
+// total hit
+global.hit = {}
+if (isCmd) {
+data = await fetchJson('https://api.countapi.xyz/hit/neoxybotz/visits')
+jumlahcmd = `${data.value}`
+dataa = await fetchJson(`https://api.countapi.xyz/hit/neoxybotz${moment.tz('Asia/Makassar').format('DDMMYYYY')}/visits`)
+jumlahharian = `${dataa.value}`
+}
+
 //━━━━━━━━━━━━━━━[ FUNCTION ]━━━━━━━━━━━━━━━━━//
 
 try {
@@ -114,7 +210,8 @@ if (!m.key.fromMe) return
 //━━━━━━━━━━━━━━━[ AUTO READ ]━━━━━━━━━━━━━━━━━//
 
 if (m.message) {
-neoxy.sendReadReceipt(m.chat, m.sender, [m.key.id])
+/*neoxy.sendReadReceipt(m.chat, m.sender, [m.key.id])*/
+neoxy.readMessages([m.key])
 console.log(chalk.black(chalk.bgWhite('[ PESAN ]')), chalk.black(chalk.bgGreen(new Date)), chalk.black(chalk.bgBlue(budy || m.mtype)) + '\n' + chalk.magenta('=> Dari'), chalk.green(pushname), chalk.yellow(m.sender) + '\n' + chalk.blueBright('=> Di'), chalk.green(m.isGroup ? pushname : 'Private Chat', m.chat))
 }
 	
@@ -128,7 +225,7 @@ for (let jid of user) global.db.data.users[jid].limit = limitUser
 console.log('Reseted Limit')
 }, {
 scheduled: true,
-timezone: "Asia/Jakarta"
+timezone: "Asia/Makassar"
 })
         
 //━━━━━━━━━━━━━━━[ AUTO SET BIO ]━━━━━━━━━━━━━━━━━//
@@ -450,16 +547,16 @@ luser.afkReason = ''
 switch(command) {
 
 case 'menu': case 'help': case 'p': {
-menu =`${(help(prefix, author, botname, owner))}`
+menu =`${(help(prefix, author, botname, owner, wita, jangwak))}`
 let btn = [{
 urlButton: {
 displayText: 'My Website',
-url: 'https://github.com/Lexxy24'
+url: 'https://github.com/KAYZOKUN12'
 }
 }, {
 urlButton: {
 displayText: 'My Youtube',
-phoneNumber: 'https://youtube.com/channel/UCGDk88W54RJOgk6b1p42NVg'
+phoneNumber: 'https://youtube.com/channel/UCtyfrzgHAcBEhpnh8u-yWNg'
 }
 }, {
 quickReplyButton: {
@@ -475,6 +572,90 @@ id: 'owner'
 neoxy.send5ButImg(m.chat, menu, creator, thumbnail, btn)
 }
 break
+case 'simplemenu': case 'list': case 'help': {
+let totalChat = await store.chats.all()
+let anubb = await store.chats.all().filter(v => v.id.endsWith('.net')).map(v => v.id)
+let anubbgc = await store.chats.all().filter(v => v.id.endsWith('@g.us')).map(v => v.id)
+let ownernya = owner + '@s.whatsapp.net'
+let me = m.sender
+let ments = [ownernya, me, ini_mark]
+let kukiw = `Hai kak ${pushname}
+  ${ucapanWaktu} 😄
+
+╭─❒ 「 BOT INFO 」
+├  _*Owner Bot*_ : ${global.nameowner}
+├  _*Name Bot*_ : ${global.botname}
+├  _*Runtime*_ : ${runtime(process.uptime())}
+├  _*Status*_ : ${neoxy.public? `Public Mode`:`Self Mode`}
+├  _*Platform : ${os.platform()}*_
+├  _*Hostname : ${os.hostname()}*_
+├  _*List Private Chat : ${anubb.length}*_
+├  _*List Group : ${anubbgc.length}*_
+├  _*List Total Chat : ${totalChat.length}*_
+├  _*Total Hit : ${jumlahcmd}*_
+├  _*Total Hit Today : ${jumlahharian}*_
+╰❒ 
+_*=>=>=>=>=>=>=>=>=>=>=>*_
+╭─❒ 「 DATE INFO 」
+├ × *Hari : ${hari}*
+├ × *Bulan : ${bulan}*
+├ × *Tahun : ${tahun}*
+├ × *Tanggal : ${jangwak}*
+╰❒ 
+_*=>=>=>=>=>=>=>=>=>=>=>*_
+╭─❒ 「 TIME INFO 」 
+├  × *🪀 Wib* : ${wib}
+├  × *🪀 Wita* : ${wita}
+├  × *🪀 Wit* : ${wit}
+╰❒ 
+_*=>=>=>=>=>=>=>=>=>=>=>*_`
+                let sections = [
+                {
+	           title: ' ∫ » Sewa Bot? –––––––·│⭔',
+	           rows: [
+	            {title: "〽️ │⭔ Sewa", rowId: `sewabot`, description: `KLIK UNTUK SEWA BOT`},
+                {title: "📴 │⭔ Owner", rowId: `owner`, description: `KLIK UNTUK BERTANYA KEPADA OWNER`}
+	            ]
+                },{
+                title: "⚠︎  ∫ » CHANGE MENU BOT « ✧",
+                rows: [
+                {title: "✦  「 Others 」", rowId: `miother`, description: `╰ ► 🌀Menu Lainnya`},
+                {title: "✦  「 Group 」", rowId: `mgroup`, description: `╰ ► 👥Fitur Buat Grup, Tapi Hati Hati Admin :v`},
+                {title: "✦  「 Downloader 」", rowId: `mdownloader`, description: `╰ ► 📥Buat Download Apaan? 🤨`},
+                {title: "✦  「 Search 」", rowId: `msearch`, description: `╰ ► ??Cari Apa Hayo`},
+                {title: "✦  「 Fun 」", rowId: `mfun`, description: `╰ ► 🔫Buat Fun² Bro`},
+                {title: "✦  「 Convert 」", rowId: `mconvert`, description: `╰ ► 🛠Mau Buat Apa?`},
+                {title: "✦  「 Anonymous 」", rowId: `manonymous`, description: `╰ ► 🎭Fitur Rahasia Jangan Dipake !`},
+                {title: "✦  「 Anime 」", rowId: `mianime`, description: `╰ ► 🧸Suka Anime Apa Kak?`},
+                {title: "✦  「 Owner 」", rowId: `mowner`, description: `╰ ► 🎟Jangan Ganggu Ownerku😡`}
+                ]
+                },{
+	           title: ' ∫ » SUPPORT ME –––––––·│⭔',
+	           rows: [
+	            {title: "🎟 │⭔ Donasi", rowId: `donasibot`, description: `╰ ► 💰 Donasi ♕︎`},
+                {title: "🔴 │⭔ SUBSCRIBE", rowId: `subsyt`, description: `╰ ► 📢 Thanks For Subscribe ♕︎`},
+                {title: "📚 │⭔ Github", rowId: `sc`, description: `╰ ► 🎷 Follow My Github ♕︎`}, 
+                {title: "📮 │⭔ Instagram", rowId: `infoig`, description: `╰ ► 📎 Follow My Instagram ♕︎`}
+                
+	]
+  },
+]
+                const listMessage = {
+  text: `${kukiw}`,
+  footer: `Please select your age at the bottom button...`,
+  title: "▢━━━━「 SIMPLEMENU 」━━━━▢",
+  buttonText: "ഒ Click Here ഒ",
+  sections
+}
+neoxy.sendMessage(m.chat, listMessage, { quoted: m })
+            }
+            break
+case 'infoig': {
+m.reply(`Instagram : @xynnnnm_`) 
+break        
+case 'subsyt': {
+m.reply(`Youtube : @pikachu_1239`) 
+break            
 case 'tiktok':{
 if (args.length < 1) return m.reply(`*Contoh* :\n#tiktok https://vt.tiktok.com/ZSdGcA6MK/?k=1`)
 if (!args[0].includes('tiktok')) return m.reply(`Link is not valid`)
@@ -941,6 +1122,8 @@ https://github.com/Lexxy24/Neoxy-Base
 _*Creator : Neoxy-BotMD*_
 _*Youtube : Lexxy Official*_
 _*Whatsapp : 0838-3455-8105*_
+
+_*Recode : KAD TEAM*_
 `
 m.reply(teks)
 break
@@ -1049,7 +1232,7 @@ delete caklontong_desk[m.sender.split('@')[0]]
 break
 case 'kuismath': case 'math': {
 if (kuismath.hasOwnProperty(m.sender.split('@')[0])) throw "Masih Ada Sesi Yang Belum Diselesaikan!"
-let { genMath, modes } = require('../json/math')
+let { genMath, modes } = require('../connect/savedata/math')
 if (!text) throw `Mode: ${Object.keys(modes).join(' | ')}\nContoh penggunaan: ${prefix}math medium`
 let result = await genMath(text.toLowerCase())
 neoxy.sendText(m.chat, `*Berapa hasil dari: ${result.soal.toLowerCase()}*?\n\nWaktu: ${(result.waktu / 1000).toFixed(2)} detik`, m).then(() => {
@@ -1091,6 +1274,25 @@ delete this.suit[id]
 }
 }
 break
+case 'ssweb':
+if (!isPremium && global.db.data.users[m.sender].limit < 1) return m.reply(mess.endLimit) // respon ketika limit habis
+db.data.users[m.sender].limit -= 1 // -1 limit
+if (!q) return m.reply(`*Example* :\n#tahta Lexxy`)
+if (!q) return m.reply(`*Example* :\n#ssweb https://google.com`)
+m.reply('proses...')
+ssweb = `https://leyscoders-api.herokuapp.com/api/ssweb-hp?url=${q}&apikey=IkyOgiwara`
+neoxy.sendMessage(from, {image:{url:ssweb}, caption:"Done!"}, {quoted:m})
+                m.reply(`*1 Limit Terpakai*\n*Sisa Limit Anda : ${global.db.data.users[m.sender].limit}*`)
+break
+case 'attp':
+if (!isPremium && global.db.data.users[m.sender].limit < 1) return m.reply(mess.endLimit) // respon ketika limit habis
+db.data.users[m.sender].limit -= 1 // -1 limit
+if (!q) return m.reply(`*Example* :\n#tahta Lexxy`)
+if (!q) return m.reply(`Contoh: ${prefix + command} Hai`)
+gehdhe = await getBuffer(`https://api.xteam.xyz/${command}?file&text=${encodeURI(q)}`)
+neoxy.sendMessage(m.chat, { sticker: gehdhe }, { quoted: m })
+                m.reply(`*1 Limit Terpakai*\n*Sisa Limit Anda : ${global.db.data.users[m.sender].limit}*`)
+break
 case 'tahta':
 if (!isPremium && global.db.data.users[m.sender].limit < 1) return m.reply(mess.endLimit) // respon ketika limit habis
 db.data.users[m.sender].limit -= 1 // -1 limit
@@ -1125,71 +1327,20 @@ m.reply(mess.wait)
 neoxy.sendMessage(m.chat, {image:{url:buffer}, caption:"Done!"}, {quoted:m})
                 m.reply(`*1 Limit Terpakai*\n*Sisa Limit Anda : ${global.db.data.users[m.sender].limit}*`)
 break
-case 'nulis': case 'nuliskanan':{
-if (!isPremium && global.db.data.users[m.sender].limit < 1) return m.reply(mess.endLimit) // respon ketika limit habis
-db.data.users[m.sender].limit -= 1 // -1 limit
-if (args.length < 1) return m.reply(`Kirim perintah *${prefix}nuliskanan* teks`)
-m.reply(mess.wait)
-                var tulisan = body.slice(12)
-                var splitText = tulisan.replace(/(\S+\s*){1,9}/g, '$&\n')
-                var fixHeight = splitText.split('\n').slice(0, 31).join('\n')
-                spawn('convert', ['./connect/nulis/buku/sebelumkanan.jpg','-font','./connect/nulis/font/Indie-Flower.ttf','-size','960x1280','-pointsize','23','-interline-spacing','2','-annotate','+128+129',fixHeight,'./connect/nulis/buku/setelahkanan.jpg'])
-                .on('error', () => m.reply('error'))
-                .on('exit', () => {
-               neoxy.sendMessage(m.chat, { image: fs.readFileSync('./connect/nulis/buku/setelahkanan.jpg')}, {quoted: m, caption: `Jangan Malas Kak...`})
-                })
-            }
-                m.reply(`*1 Limit Terpakai*\n*Sisa Limit Anda : ${global.db.data.users[m.sender].limit}*`)
-break
-case 'nuliskiri':{
-if (!isPremium && global.db.data.users[m.sender].limit < 1) return m.reply(mess.endLimit) // respon ketika limit habis
-db.data.users[m.sender].limit -= 1 // -1 limit
-if (args.length < 1) return m.reply(`Kirim perintah *${prefix}nuliskiri* teks`)
-m.reply(mess.wait)
-var tulisan = body.slice(11)
-var splitText = tulisan.replace(/(\S+\s*){1,9}/g, '$&\n')
-var fixHeight = splitText.split('\n').slice(0, 31).join('\n')
-spawn('convert', ['./connect/nulis/buku/sebelumkiri.jpg','-font','./connect/nulis/font/Indie-Flower.ttf','-size','960x1280','-pointsize','22','-interline-spacing','2','-annotate','+140+153',fixHeight,'./connect/nulis/buku/setelahkiri.jpg'])
-.on('error', () => m.reply('error'))
-.on('exit', () => {
-neoxy.sendMessage(m.chat, { image: fs.readFileSync('./connect/nulis/buku/setelahkiri.jpg')}, {quoted: m, caption: `Jangan Malas Kak...`})
-})
-}
-m.reply(`*1 Limit Terpakai*\n*Sisa Limit Anda : ${global.db.data.users[m.sender].limit}*`)
-break
-case 'foliokiri':{
-if (!isPremium && global.db.data.users[m.sender].limit < 1) return m.reply(mess.endLimit) // respon ketika limit habis
-db.data.users[m.sender].limit -= 1 // -1 limit
- if (args.length < 1) return m.reply(`Kirim perintah *${prefix}foliokiri* teks`)
-m.reply(mess.wait)
-                var tulisan = body.slice(11)
-                var splitText = tulisan.replace(/(\S+\s*){1,13}/g, '$&\n')
-                var fixHeight = splitText.split('\n').slice(0, 38).join('\n')
-                spawn('convert', ['./connect/nulis/buku/folio/sebelumkiri.jpg','-font','./connect/nulis/font/Indie-Flower.ttf','-size','1720x1280','-pointsize','23','-interline-spacing','4','-annotate','+48+185',fixHeight,'./connect/nulis/buku/folio/setelahkiri.jpg'])
-                .on('error', () => m.reply('error'))
-                .on('exit', () => {
-                neoxy.sendMessage(m.chat, { image: fs.readFileSync('./connect/nulis/buku/folio/setelahkiri.jpg')}, {quoted: m, caption: `Jangan Malas Kak...`})
-                })
-            }
-            
-                m.reply(`*1 Limit Terpakai*\n*Sisa Limit Anda : ${global.db.data.users[m.sender].limit}*`)
-break
-case 'foliokanan':{
-if (!isPremium && global.db.data.users[m.sender].limit < 1) return m.reply(mess.endLimit) // respon ketika limit habis
-db.data.users[m.sender].limit -= 1 // -1 limit
-if (args.length < 1) return m.reply(`Kirim perintah *${prefix}foliokanan* teks`)
-m.reply(mess.wait)
-                var tulisan = body.slice(12)
-                var splitText = tulisan.replace(/(\S+\s*){1,13}/g, '$&\n')
-                var fixHeight = splitText.split('\n').slice(0, 38).join('\n')
-                spawn('convert', ['./connect/nulis/buku/folio/sebelumkanan.jpg','-font','./connect/nulis/font/Indie-Flower.ttf','-size','960x1280','-pointsize','23','-interline-spacing','3','-annotate','+89+190',fixHeight,'./connect/nulis/buku/folio/setelahkanan.jpg'])
-                .on('error', () => m.reply('error'))
-                .on('exit', () => {
-                neoxy.sendMessage(m.chat, { image: fs.readFileSync('./connect/nulis/buku/folio/setelahkanan.jpg')}, {quoted: m, caption: `Jangan Malas Kak...`})
-                })
-            }
-                m.reply(`*1 Limit Terpakai*\n*Sisa Limit Anda : ${global.db.data.users[m.sender].limit}*`)
-break
+case 'tourl': {
+  m.reply(mess.wait)
+  let { UploadFileUgu, webp2mp4File, TelegraPh } = require('../message/uploader')
+  let media = await neoxy.downloadAndSaveMediaMessage(quoted)
+  if (/image/.test(mime)) {
+  let anu = await TelegraPh(media)
+  m.reply(util.format(anu))
+  } else if (!/image/.test(mime)) {
+  let anu = await UploadFileUgu(media)
+  m.reply(util.format(anu))
+  }
+  await fs.unlinkSync(media)
+  }
+  break
 case 'prem': {
 if (!isCreator) return m.reply(mess.owner)
 if (!args[0]) return m.reply(`*Example* : #prem add 628xxxx`)
@@ -1391,12 +1542,12 @@ await sleep(1500)
 let btn = [{
 urlButton: {
 displayText: 'My Website',
-url: 'https://github.com/Lexxy24'
+url: 'https://github.com/KAYZOKUN12'
 }
 }, {
 urlButton: {
 displayText: 'My Youtube',
-phoneNumber: 'https://youtube.com/channel/UCGDk88W54RJOgk6b1p42NVg'
+phoneNumber: 'https://youtube.com/channel/UCtyfrzgHAcBEhpnh8u-yWNg'
 }
 }, {
 quickReplyButton: {
@@ -1427,12 +1578,12 @@ await sleep(1500)
 let btn = [{
 urlButton: {
 displayText: 'My Website',
-url: 'https://github.com/Lexxy24'
+url: 'https://github.com/KAYZOKUN12'
 }
 }, {
 urlButton: {
 displayText: 'My Youtube',
-phoneNumber: 'https://youtube.com/channel/UCGDk88W54RJOgk6b1p42NVg'
+phoneNumber: 'https://youtube.com/channel/UCtyfrzgHAcBEhpnh8u-yWNg'
 }
 }, {
 quickReplyButton: {
@@ -1568,7 +1719,70 @@ return "case"+`'${cases}'`+fs.readFileSync("connect/xxy.js").toString().split('c
 }
 m.reply(`${getCase(q)}`)
 break
-
+case 'yts': case 'ytsearch': {
+  m.reply(mess.wait)
+  if (!text) throw `Example : ${prefix + command} story wa anime`
+  let yts = require("yt-search")
+  let search = await yts(text)
+  let teks = '*---- Data Ditemukan ----*\n\n Keywords : '+text+'\n\n'
+  let no = 1
+  for (let i of search.all) {
+  teks += `🔢 No : ${no++}
+🎞️ Type : ${i.type}
+📀 Video ID : ${i.videoId}
+📄 Title : ${i.title}
+👁️ Views : ${i.views}
+👁️ Duration : ${i.timestamp}
+📤 Upload : ${i.ago}
+👨‍🎤 Author : ${i.author.name}
+🔗 Url : ${i.url}\n\n─────────────────\n\n`
+  }
+  neoxy.sendMessage(m.chat, { image: { url: search.all[0].thumbnail },  caption: teks }, { quoted: m })
+  }
+  break
+case 'pinterest': {
+  if (!text) return m.reply(`Mau Cari Apa Di ${command}?\nExample : *${prefix + command} hinata*`)
+  m.reply(mess.wait)
+  let anu = await pinterest(text)
+  result = anu[Math.floor(Math.random() * anu.length)]
+  let buttonspinterest = [{buttonId: `pinterest ${text}`, buttonText: {displayText: 'Next Result'}, type: 1}]
+  neoxy.sendMessage(m.chat, { image: { url: result }, caption: 'Source Url : '+result, buttons: buttonspinterest }, { quoted: m })
+  }
+  break
+case 'wallpaper': {
+  if (!text) return m.reply(`Mau Cari Apa Di ${command}?\nExample : *${prefix + command} hinata*`)
+  m.reply(mess.wait)
+  let anu = await wallpaper(text)
+  result = anu[Math.floor(Math.random() * anu.length)]
+  let buttonswallpaper = [{buttonId: `wallpaper ${text}`, buttonText: {displayText: 'Next Result'}, type: 1}]
+  neoxy.sendMessage(m.chat, { image: { url: result.image[0] }, caption: `Source Url : ${result.image[2] || result.image[1] || result.image[0]}`, buttons: buttonswallpaper }, { quoted: m })
+  }
+  break
+case 'quotesanime': {
+  m.reply(mess.wait)
+  let anu = await quotesAnime()
+  result = anu[Math.floor(Math.random() * anu.length)]
+  let buttonsquotes = [{buttonId: `quotesanime`, buttonText: {displayText: 'Next Result'}, type: 1}]
+  neoxy.sendButtonText(m.chat, buttonsquotes, `${result.quotes}\n\nBy : ${result.karakter}`, global.ownerName, m)
+  }
+  break
+case 'wikimedia': {
+  if (!text) throw 'Masukkan Query Title'
+  let wiki = await wikimedia(text)
+  result = wiki[Math.floor(Math.random() * wiki.length)]
+  let buttons = [{buttonId: `wikimedia ${text}`, buttonText: {displayText: 'Next Result'}, type: 1}]
+  let buttonMessage = {
+  image: { url: result.image },
+  caption: `📄 Title : ${result.title}
+📬 Source : ${result.source}
+🔗 Media Url : ${result.image}`,
+  footer: global.ownerName,
+  buttons: buttons,
+  headerType: 4
+  }
+  neoxy.sendMessage(m.chat, buttonMessage, { quoted: m })
+  }
+  break
 //━━━━━━━━━━━━━━━[ AKHIR FITUR ]━━━━━━━━━━━━━━━━━//
 
 default:
