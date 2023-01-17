@@ -1,6 +1,6 @@
 // Created By Neoxy Team
 
-require('./config')
+require('./options/config')
 const { default: xxyneoConnect, useSingleFileAuthState, DisconnectReason, fetchLatestBaileysVersion, generateForwardMessageContent, prepareWAMessageMedia, generateWAMessageFromContent, generateMessageID, downloadContentFromMessage, makeInMemoryStore, jidDecode, proto } = require("@adiwajshing/baileys")
 const { state, saveState } = useSingleFileAuthState(`./connect/session/session.json`)
 const pino = require('pino')
@@ -131,10 +131,25 @@ ppgroup = await xxyneo.profilePictureUrl(anu.id, 'image')
 ppgroup = 'https://i0.wp.com/www.gambarunik.id/wp-content/uploads/2019/06/Top-Gambar-Foto-Profil-Kosong-Lucu-Tergokil-.jpg'
 }
 
+//Resize
+const reSize = async(buffer, ukur1, ukur2) => {
+return new Promise(async(resolve, reject) => {
+let jimp = require('jimp')
+var baper = await jimp.read(buffer);
+var ab = await baper.resize(ukur1, ukur2).getBufferAsync(jimp.MIME_JPEG)
+resolve(ab)
+})
+}
+
+let buttons = [{ buttonId: '#donasibot', buttonText: { displayText: '🙏Donasi' }, type: 1 },{ buttonId: '#rules', buttonText: { displayText: '❗Rules' }, type: 1 }]
 if (anu.action == 'add') {
-xxyneo.sendMessage(anu.id, { image: { url: ppuser }, contextInfo: { mentionedJid: [num] }, caption: `Welcome To ${metadata.subject} @${num.split("@")[0]}` })
+xxyneo.sendMessage(anu.id, { location: { jpegThumbnail: await reSize(ppuser, 100, 100)}, contextInfo: { mentionedJid: [num] }, caption: `Welcome To ${metadata.subject} @${num.split("@")[0]}` })
 } else if (anu.action == 'remove') {
-xxyneo.sendMessage(anu.id, { image: { url: ppuser }, contextInfo: { mentionedJid: [num] }, caption: `@${num.split("@")[0]} Leaving To ${metadata.subject}` })
+xxyneo.sendMessage(anu.id, { location: { jpegThumbnail: await reSize(ppuser, 100, 100)}, contextInfo: { mentionedJid: [num] }, caption: `@${num.split("@")[0]} Leaving To ${metadata.subject}` })
+} else if (anu.action == 'promote') {
+xxyneo.sendMessage(anu.id, { location: { jpegThumbnail: await reSize(ppuser, 100, 100)}, contextInfo: { mentionedJid: [num] }, caption: `@${num.split('@')[0]} Promote From ${metadata.subject}`, buttons: buttons, footer: `NeoxyBotz - MD` })
+} else if (anu.action == 'demote') {
+xxyneo.sendMessage(anu.id, { location: { jpegThumbnail: await reSize(ppuser, 100, 100)}, contextInfo: { mentionedJid: [num] }, caption: `@${num.split('@')[0]} Demote From ${metadata.subject}`, buttons: buttons, footer: `NeoxyBotz - MD` })
 }
 }
 } catch (err) {
